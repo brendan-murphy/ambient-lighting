@@ -8,6 +8,8 @@ import java.awt.Dimension;
 
 int RES_X;
 int RES_Y;
+int xLED;
+int yLED;
 
 Serial myPort;
 Robot robby;
@@ -17,7 +19,9 @@ Robot robby;
 void setup(){
   RES_X = 1920;
   RES_Y = 1080;
-  size(200,200);
+  xLED = 90;
+  yLED = 90;
+  //size(200,200);
   String portName = Serial.list()[1];
   myPort = new Serial(this, portName, 9600);
   
@@ -32,18 +36,15 @@ void setup(){
 }
 
 void draw(){
-  /*if (myPort.available() > 0){
-    println(myPort.readStringUntil('\n')); 
-  }*/
-  
-  /*if(mousePressed == true){
-    myPort.write('1');
-    println("1"); 
-  }*/
-  
   myPort.write(0xff);
+  myPort.write((byte)(xLED));
+  myPort.write((byte)(yLED));
   WriteSection(new Rectangle(0,RES_Y/2,RES_X/3,RES_Y/2));
   WriteSection(new Rectangle(0,0,RES_X/3,RES_Y/2));
+  WriteSection(new Rectangle(RES_X/3,0,RES_X/3,RES_Y/2));
+  WriteSection(new Rectangle(RES_X * (2/3),0,RES_X/3,RES_Y/2));
+  WriteSection(new Rectangle(RES_X * (2/3),RES_Y/2,RES_X/3,RES_Y/2));
+  WriteSection(new Rectangle(RES_X/3,RES_Y/2,RES_X/3,RES_Y/2));
 }
 
 void WriteSection(Rectangle rect){
