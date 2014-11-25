@@ -1,8 +1,8 @@
 #include <Adafruit_NeoPixel.h>
 
 #define PIN 11
-#define COUNT 60
 
+int xCount, yCount;
 int r, g, b;
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(60, PIN, NEO_GRB + NEO_KHZ800);
@@ -16,20 +16,61 @@ void setup() {
 }
 
 void loop() {
-  if(Serial.available() >= 7){
+  if(Serial.available() >= 21){
     if(Serial.read() == 0xff){
       
+      xCount = (int)Serial.read();
+      yCount = (int)Serial.read();
+      
+      // Bottom Left
       r = (int)Serial.read(); 
       g = (int)Serial.read(); 
       b = (int)Serial.read(); 
-      for (int i = 0; i < 17; i++){
+      
+      for (int i = 0; i < xCount / 2; i++){
+        strip.setPixelColor(i, r, g, b);
+      }
+      for (int i = 2 * xCount + (5/3) * yCount; i < 2 * xCount + 2 * yCount; i++){
         strip.setPixelColor(i, r, g, b);
       }
       
+      // Top Left
       r = (int)Serial.read(); 
       g = (int)Serial.read(); 
       b = (int)Serial.read(); 
-      for (int i = 17; i < 51; i++){
+      for (int i = xCount / 2; i < xCount + yCount / 3; i++){
+        strip.setPixelColor(i, r, g, b);
+      }
+      
+      // Top Middle
+      r = (int)Serial.read(); 
+      g = (int)Serial.read(); 
+      b = (int)Serial.read(); 
+      for (int i = xCount + yCount / 3; i < xCount + (2/3) * yCount; i++){
+        strip.setPixelColor(i, r, g, b);
+      }
+      
+      // Top Right
+      r = (int)Serial.read(); 
+      g = (int)Serial.read(); 
+      b = (int)Serial.read(); 
+      for (int i = xCount + (2/3) * yCount; i < (3/2) * xCount + yCount; i++){
+        strip.setPixelColor(i, r, g, b);
+      }
+      
+      // Bottom Right
+      r = (int)Serial.read(); 
+      g = (int)Serial.read(); 
+      b = (int)Serial.read(); 
+      for (int i = (3/2) * xCount + yCount; i < 2 * xCount + (4/3) * yCount; i++){
+        strip.setPixelColor(i, r, g, b);
+      }
+      
+      // Bottom Middle
+      r = (int)Serial.read(); 
+      g = (int)Serial.read(); 
+      b = (int)Serial.read(); 
+      for (int i = 2 * xCount + (4/3) * yCount(3/2) * xCount + yCount; i < 2 * xCount + (5/3) * yCount; i++){
         strip.setPixelColor(i, r, g, b);
       }
       
@@ -37,14 +78,6 @@ void loop() {
       strip.show();
     }
   }
-}
-
-void Random(uint8_t wait){
-   for (int i = 0; i < COUNT; i++){
-    strip.setPixelColor(i, random(0,255), random(0,255), random(0,255));
-  }
-  strip.show();
-  delay(wait);
 }
 
 void ClearStrip(uint8_t wait){
